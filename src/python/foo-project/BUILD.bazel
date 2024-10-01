@@ -11,7 +11,8 @@ py_binary(
 
 py_library(
     name="lib",
-    srcs = glob(["src/**/*.py"])
+    srcs = glob(["src/**/*.py"]),
+    imports=["src"]
 )
 
 py_test(
@@ -30,4 +31,12 @@ run_binary(
         "foo_project-0.1.0-py3-none-any.whl",
         "foo_project-0.1.0.tar.gz"
     ],
+)
+
+load("//tools/pytest:defs.bzl", "pytest_test")
+
+pytest_test(
+    name="pytest",
+    srcs=glob(["tests/**/*.py"]),
+    deps=[requirement("requests"), ":lib"]
 )
