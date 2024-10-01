@@ -1,0 +1,7 @@
+# Pants workspace files
+/.pants.d
+/dist/
+/bazel-bazel-basics
+/bazel-bin
+/bazel-out
+/bazel-testlogs

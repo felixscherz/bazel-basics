@@ -1,0 +1,33 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_python//python:defs.bzl", "py_test")
+load("@py-deps//:requirements.bzl", "requirement")
+load("@aspect_bazel_lib//lib:run_binary.bzl", "run_binary")
+
+py_binary(
+    name="main",
+    srcs = ["main.py"],
+    deps = [requirement("build")]
+)
+
+py_library(
+    name="lib",
+    srcs = glob(["src/**/*.py"])
+)
+
+py_test(
+    name="test",
+    srcs=glob(["tests/**/*.py", "tests.py"]),
+    main="tests.py",
+    deps=[":lib", requirement("pytest"), requirement("requests")]
+)
+
+run_binary(
+    name="package",
+    tool="main",
+    args=["$(execpath foo_project-0.1.0.tar.gz)"],
+    srcs = glob(["src/**/*.py"]) + [":pyproject.toml"],
+    outs = [
+        "foo_project-0.1.0-py3-none-any.whl",
+        "foo_project-0.1.0.tar.gz"
+    ],
+)
